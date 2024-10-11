@@ -33,6 +33,24 @@ jobs:
         run: |
           docker push $DOCKER_IMAGE:${{ github.sha }}
           docker push $DOCKER_IMAGE:latest
+
+
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push docker image to Amazon ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: hackathon
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t hackathon .
+          docker tag hackathon:latest 891376951153.dkr.ecr.ap-south-1.amazonaws.com/hackathon:latest
+          docker push 891376951153.dkr.ecr.ap-south-1.amazonaws.com/hackathon:latest
+
+          
       - name: Official SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v3.0.0
         with:
