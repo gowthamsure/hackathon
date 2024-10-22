@@ -33,32 +33,39 @@ jobs:
         run: |
           docker push $DOCKER_IMAGE:${{ github.sha }}
           docker push $DOCKER_IMAGE:latest
-      - name: Official SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v3.0.0
-        with:
-          projectBaseDir: .
-          args: >
-            -Dsonar.projectKey=hackathon-proj -Dsonar.host.url=${{ env.SONAR_HOST_URL
-            }} -Dsonar.login=${{ env.SONAR_TOKEN }}
-            -Dsonar.working.directory=./.scannerwork
-      - name: Print SonarQube Logs
-        run: >
-          ls -al .scannerwork
-          cat .scannerwork/report-task.txt || echo "report-task.txt not found"
-      - name: SonarQube Quality Gate check
-        id: sonarqube-quality-gate-check
-        uses: sonarsource/sonarqube-quality-gate-action@master
+      #- name: Official SonarQube Scan
+       # uses: SonarSource/sonarqube-scan-action@v3.0.0
+        #with:
+         # projectBaseDir: .
+          #args: >
+           # -Dsonar.projectKey=hackathon-proj -Dsonar.host.url=${{ env.SONAR_HOST_URL
+            #}} -Dsonar.login=${{ env.SONAR_TOKEN }}
+            #-Dsonar.working.directory=./.scannerwork
+      #- name: Print SonarQube Logs
+       # run: >
+        #  ls -al .scannerwork
+         # cat .scannerwork/report-task.txt || echo "report-task.txt not found"
+      #- name: SonarQube Quality Gate check
+       # id: sonarqube-quality-gate-check
+        #uses: sonarsource/sonarqube-quality-gate-action@master
       # Force to fail step after specific time.
-        timeout-minutes: 5
-        env:
-           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      - name: Configure AWS Credentials
+       # timeout-minutes: 5
+        #env:
+         #  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          # SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+     # - name: Configure AWS Credentials
+      #  uses: aws-actions/configure-aws-credentials@v1
+       # with:
+        #  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+         # aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          #aws-region: ap-south-1
+      - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
+         role-to-assume: arn:aws:iam::891376951153:role/oidc-role
+         role-session-name: githubrolesession
+         aws-region: ap-south-1
+ 
       - name: Install kubectl
         uses: azure/setup-kubectl@v2.0
         with:
