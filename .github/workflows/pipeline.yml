@@ -87,6 +87,6 @@ jobs:
       # Step 4: Update kubeconfig to access EKS cluster
       - name: Update kubeconfig for EKS
         run: |
-          aws eks update-kubeconfig --name hackathon-k8s --region global
+          aws eks update-kubeconfig --name hhackathon-main-k8s --region ap-south-1
       - run:
          kubectl apply -f deployment.yaml
