@@ -17,6 +17,9 @@ jobs:
       #KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
      # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
      # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    permissions:
+      id-token: write   # This is required for requesting the JWT
+      contents: read    # This is required for actions/checkout
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
